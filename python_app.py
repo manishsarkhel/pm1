@@ -81,20 +81,28 @@ def rbs_allocator():
         # Logic to add resource
         st.success(f"Added resource '{resource_name}' under {resource_category}")
 
-def visualization_engine():
-    st.header("Visualization")
+def display_sample_wbs():
+    # Sample code to create and display a WBS visualization without requiring Graphviz
+    G = nx.DiGraph()
+    G.add_node("Project")
+    G.add_edges_from([
+        ("Project", "Planning"),
+        ("Project", "Execution"),
+        ("Project", "Closing"),
+        ("Planning", "Requirements"),
+        ("Planning", "Design"),
+        ("Execution", "Development"),
+        ("Execution", "Testing"),
+        ("Closing", "Documentation"),
+        ("Closing", "Delivery")
+    ])
     
-    viz_type = st.selectbox(
-        "Visualization Type",
-        ["WBS Tree", "RBS Tree", "Resource Allocation Heatmap", "WBS-RBS Network"]
-    )
-    
-    # Sample visualization code
-    if viz_type == "WBS Tree":
-        display_wbs_tree()
-    elif viz_type == "RBS Tree":
-        display_rbs_tree()
-    # Other visualization options
+    fig, ax = plt.subplots(figsize=(10, 6))
+    # Use a different layout algorithm that doesn't require Graphviz
+    pos = nx.spring_layout(G, seed=42)  # Alternative: nx.nx_pydot.graphviz_layout(G, prog="dot")
+    nx.draw(G, pos, with_labels=True, node_color="lightblue", 
+            node_size=2000, arrowsize=20, font_size=10, ax=ax)
+    st.pyplot(fig)
 
 def challenge_mode():
     st.header("Challenge Mode")
